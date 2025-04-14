@@ -8,5 +8,6 @@ seaborn
 tensorflow-cpu==2.10.0
 tf-keras
 streamlit
+streamlit-option-menu
 PyPDF2
 google-genai

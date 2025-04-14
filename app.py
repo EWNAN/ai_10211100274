@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore")
 # For PDF text extraction
 import PyPDF2
 import io
+import os
 
 def extract_text_from_pdf(file_buffer):
     try:
@@ -38,6 +39,29 @@ def extract_text_from_pdf(file_buffer):
 # ----------------------------
 def regression_module():
     st.header("Regression Model")
+    # User instructions section with enhanced styling
+    with st.expander("📋 How to use this Regression Module", expanded=True):
+        st.markdown("""
+        <div style="background-color: #000000; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #FFFFFF; margin-top: 0;">🔍 Quick Guide to Regression Analysis</h3>
+            
+            This module helps you build a simple linear regression model to predict a numeric value.
+            
+            📝 Steps to Follow:
+           
+                1. Upload your CSV file using the uploader below
+                2. Explore your data using the EDA visualizations
+                3. Select your target variable (what you want to predict)
+                4. Review model performance using metrics like R² and RMSE
+                5. Try custom predictions using the input fields at the bottom
+    
+            
+            ✅ Best for:
+            Predicting continuous values like prices, scores, or measurements.
+            
+            💡 Example datasets: Housing prices, Student scores, Sales forecasts
+            
+        """, unsafe_allow_html=True)
     
     # File upload and preview
     uploaded_file = st.file_uploader("Upload your regression dataset (CSV file)", type="csv", key="regression")
@@ -52,10 +76,10 @@ def regression_module():
         
         # --- Exploratory Data Analysis (EDA) ---
         with st.expander("Show EDA Visualizations"):
-            st.write("### Descriptive Statistics")
+            st.write("# Descriptive Statistics")
             st.write(df.describe())
             
-            st.write("### Correlation Matrix")
+            st.write("# Correlation Matrix")
             corr = df.corr()
             fig_corr, ax_corr = plt.subplots()
             cax = ax_corr.matshow(corr, cmap='viridis')
@@ -66,7 +90,7 @@ def regression_module():
             ax_corr.set_yticklabels(corr.columns)
             st.pyplot(fig_corr)
             
-            st.write("### Box Plots for Numeric Features")
+            st.write("# Box Plots for Numeric Features")
             for col in numeric_cols:
                 fig_box, ax_box = plt.subplots()
                 ax_box.boxplot(df[col].dropna())
@@ -74,7 +98,7 @@ def regression_module():
                 ax_box.set_ylabel(col)
                 st.pyplot(fig_box)
             
-            st.write("### Scatter Plots: Features vs. Target")
+            st.write("# Scatter Plots: Features vs. Target")
             target_col_eda = st.selectbox("Select the target column for EDA", options=numeric_cols, key="eda_target")
             if target_col_eda:
                 feature_candidates = [col for col in numeric_cols if col != target_col_eda]
@@ -165,6 +189,29 @@ def regression_module():
 # ----------------------------
 def clustering_module():
     st.header("Clustering Application")
+    # User instructions section with enhanced styling
+    with st.expander("📋 How to use this Clustering Module", expanded=True):
+        st.markdown("""
+        <div style="background-color: #000000; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #FFFFFF; margin-top: 0;">🔍 Quick Guide to Clustering Analysis</h3>
+            
+            This module helps you discover natural groupings (clusters) in your data.
+            
+            📝 Steps to Follow:
+        
+                1. Upload your CSV file using the uploader below
+                2. Select the features you want to use for clustering
+                3. Choose preprocessing options like scaling or outlier removal
+                4. Review the evaluation metrics to find the optimal number of clusters
+                5. Set your final cluster count and explore the visualization
+                6. Download the clustered data if you want to save the results
+         
+            
+            ✅ Best for: Customer segmentation, pattern discovery, or data exploration.
+            
+            💡 Example datasets: Customer data, Behavioral data, Feature-rich datasets
+        </div>
+        """, unsafe_allow_html=True)
     
     # File Upload
     uploaded_file = st.file_uploader("Upload your dataset (CSV file) for clustering", type="csv", key="clust_upload")
@@ -182,7 +229,7 @@ def clustering_module():
             # Drop missing values based on selected features
             X = df[selected_features].dropna()
             
-            st.markdown("### Optional Steps for Increased Accuracy")
+            st.markdown("# Optional Steps for Increased Accuracy")
             st.markdown("The following options can help improve clustering performance. Hover over each option to learn why it might be beneficial.")
             use_scaling = st.checkbox("Apply Feature Scaling (StandardScaler)", value=True, help="Standardizing features ensures all variables contribute equally to the clustering distance metrics.")
             use_outlier_removal = st.checkbox("Remove Outliers (IQR method)", value=False, help="Removing outliers reduces noise that may distort cluster formation.")
@@ -323,6 +370,35 @@ def clustering_module():
 # ----------------------------
 def neural_network_module():
     st.header("Neural Network for Classification")
+    # User instructions section with enhanced styling
+    with st.expander("📋 How to use this Neural Network Module", expanded=True):
+        st.markdown("""
+        <div style="background-color: #000000; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #FFFFFF; margin-top: 0;">🔍 Quick Guide to Neural Network Classification</h3>
+            
+            This module helps you build a neural network to classify data into different categories.</p>
+            
+            📝 Steps to Follow:
+
+                1. Upload your CSV file using the uploader below
+                2. Select your target column (the category you want to predict)
+                3. Choose your feature columns (the data used to make predictions)
+                4. Adjust the hyperparameters like epochs and learning rate
+                5. Train the model and watch the training progress
+                6. Try custom predictions using the input fields at the bottom
+            
+            
+            ✅ Best for:
+            Classification tasks like spam detection, sentiment analysis, or image classification.</p>
+            
+            💡 Example datasets: Iris flower dataset, Customer churn prediction, Credit risk assessment
+            
+            
+
+            Note: The target column should contain categorical values (classes)
+        </div>
+        """, unsafe_allow_html=True)
+    
     st.markdown(
         "Upload a CSV dataset for a classification task. The target column should be categorical. Ensure your features are numeric."
     )
@@ -365,7 +441,7 @@ def neural_network_module():
             X_test_scaled = scaler.transform(X_test)
             
             # Allow user to set hyperparameters
-            st.markdown("### Set Hyperparameters")
+            st.markdown("# Set Hyperparameters")
             epochs = st.number_input("Number of epochs", min_value=1, value=10, step=1, key="nn_epochs")
             learning_rate = st.number_input("Learning Rate", min_value=0.0001, value=0.001, format="%.4f", key="nn_lr")
             batch_size = st.number_input("Batch Size", min_value=1, value=32, step=1, key="nn_batch")
@@ -410,7 +486,7 @@ def neural_network_module():
             st.success("Training complete!")
             
             # Plot training metrics
-            st.markdown("### Training Metrics")
+            st.markdown("# Training Metrics")
             fig_loss, ax_loss = plt.subplots()
             ax_loss.plot(history.history['loss'], label="Train Loss")
             ax_loss.plot(history.history['val_loss'], label="Validation Loss")
@@ -454,6 +530,9 @@ def neural_network_module():
 from google.genai import Client  # Import the Gemini API client
 from google import genai
 from google.genai import types
+from pathlib import Path
+from io import BytesIO
+import base64
 
 # Initialize the client with your API key; replace with your actual API key.
 client = Client(api_key="AIzaSyCVIka7igfvXvtFEsMTv3EjmPjScDHJ7W0")  # Make sure to replace YOUR_GEMINI_API_KEY with your Gemini API key
@@ -478,38 +557,151 @@ def retrieve_relevant_chunk(context_text, query, chunk_size=500):
     best_chunk = chunks[best_index]
     return best_chunk, similarities[best_index]
 
+def extract_text_from_ppt(ppt_path: Path) -> str:
+    """
+    Extract text from a PowerPoint (.pptx) file using python-pptx.
+    """
+    try:
+        prs = Presentation(str(ppt_path))
+        text = ""
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    text += shape.text + "\n"
+        return text
+    except Exception as e:
+        st.error(f"Error extracting text from PPT: {e}")
+        return ""
+    
+
 def rag_llm_module():
     st.header("LLM Q&A Module with RAG")
-    st.markdown("""
-    This module uses Google's Gemini API to answer your questions by augmenting your query with context from a selected document.
-    Choose a document as context:
-      - Academic City Student Handbook
-      - 2025 Budget Statement and Economic Policy
-    """)
+
+    # User instructions section
+    with st.expander("📋 How to use this LLM Q&A Module", expanded=True):
+        st.markdown("""
+        <div style="background-color: #000000; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #FFFFFF; margin-top: 0;">🔍 Quick Guide to LLM Question Answering with RAG</h3>            
+            
+            How it works: The system finds the most relevant section of your document that matches your question, then uses Gemini AI to generate an answer specifically focused on that context.
+             How It Works
+            1. Upload Documents:  
+            - Supported formats: PDF, TXT, and CSV.
+            2. Review Extracted Text:  
+            - The system processes and displays a snippet from your chosen document.
+            3. Ask a Question:  
+            - Type your question in the input box.
+            4. Get AI-Powered Answers:  
+            - The system retrieves the most relevant context from your document and generates an answer.
+                    
+            Context Options
+            - Academic City Student Handbook
+            - 2025 Budget Statement and Economic Policy
+            - Ghana Election Result CSV
+            
+                                
+            Steps to follow:
+            1. Select a context document from the dropdown menu
+            2. Verify the document loaded correctly by checking for previews or success messages
+            3. Enter your question in the text input field
+            4. Adjust the max tokens if you want longer or shorter answers
+            5. Click "Get Answer" to generate a response
+            
+            Tips for Best Results
+            - 🔍 Be specific: Ask clear, focused questions.
+            - 🔄 One question at a time: For better accuracy.
+            - 💡 Rephrase if needed: Try different wordings if the answer isn't clear.
+            - 📖 Review context: The answer is based on the content from your selected document.
+        </div>                
+           
+                                            
+            """, unsafe_allow_html=True)
 
     # Let the user choose the context document (we assume local files here)
     document_choice = st.selectbox("Select Context Document", 
-                                     ("Academic City Student Handbook", "2025 Budget Statement and Economic Policy"))
+                                     ("Academic City Student Handbook", "2025 Budget Statement and Economic Policy", "Ghana Elections Results CSV"))
     
     context_text = ""
     context_label = document_choice
-    try:
-        if document_choice == "Academic City Student Handbook":
+    if document_choice == "Academic City Student Handbook":
+        try:
             with open("handbook.pdf", "rb") as f:
                 context_text = extract_text_from_pdf(f)
-        else:
+        except Exception as e:
+            st.error(f"Error loading handbook: {e}")
+    elif document_choice == "2025 Budget Statement and Economic Policy":
+        try:
             with open("2025-Budget-Statement-and-Economic-Policy_v4.pdf", "rb") as f:
                 context_text = extract_text_from_pdf(f)
-    except Exception as e:
-        st.error(f"Error loading document: {e}")
-        return
+        except Exception as e:
+            st.error(f"Error loading budget document: {e}")
+    elif document_choice == "Ghana Elections Results CSV":  # Make sure this matches exactly with your selectbox option
+        #st.write("Debug: Attempting to load CSV file")
+        
+        
+        try:
+            
+            # Try multiple approaches
+            
+            # Approach 1: Direct path
+            csv_path = "Ghana_Election_Result.csv"
+            #st.write(f"Debug: Trying direct path: {csv_path}")
+            
+            if os.path.exists(csv_path):
+                #st.write(f"Debug: File exists at {csv_path}")
+                with open(csv_path, "r", encoding="utf-8") as f:
+                    context_text = f.read()
+                #st.write(f"Debug: Content length: {len(context_text)}")
 
-    if context_text:
-        # Retrieve the most relevant chunk based on the user's later query.
-        st.markdown(f"**Using context from:** {context_label}")
-    else:
-        st.error("No context text loaded.")
-        return
+                import pandas as pd
+                # Read the CSV file with pandas
+                df = pd.read_csv(csv_path)
+                
+                # Display a preview table of the data
+                st.subheader("CSV Data Preview:")
+                st.dataframe(df.head(10), use_container_width=True)  # Show first 10 rows
+            else:
+                st.write(f"Debug: File does not exist at {csv_path}")
+            
+            # Approach 2: Use pandas if available
+            if not context_text:
+                st.write("Debug: Trying pandas approach")
+                try:
+                    import pandas as pd
+                    df = pd.read_csv(csv_path)
+                    context_text = df.to_string()
+                    st.write(f"Debug: Pandas loaded content length: {len(context_text)}")
+                except Exception as e:
+                    st.write(f"Debug: Pandas approach failed: {str(e)}")
+            
+            # Approach 3: File uploader fallback
+            if not context_text:
+                st.write("Debug: Offering file upload")
+                uploaded_file = st.file_uploader("Upload Ghana Election Result CSV", type=["csv"])
+                if uploaded_file:
+                    context_text = uploaded_file.getvalue().decode("utf-8")
+                    st.write(f"Debug: Uploaded file content length: {len(context_text)}")
+            
+        except Exception as e:
+            st.write(f"Debug: Error during CSV loading: {str(e)}")
+            import traceback
+            st.write(f"Debug: Traceback: {traceback.format_exc()}")
+     
+
+    # For PDF/CSV documents, display a text snippet preview:
+    # if document_choice != "Input-Output Organization PPT":
+    #     if context_text:
+    #         snippet = " ".join(context_text.split()[:500])
+    #         st.markdown(f"**Using context from:** {context_label}")
+    #         st.markdown("**Context snippet (first 500 words):**")
+    #         st.text(snippet)
+    #     else:
+    #         st.error("No context text loaded.")
+    #         return
+    # else:
+    #     # For the image, the preview is the image itself.
+    #     st.markdown(f"**Using context from:** {context_label}")
+    #     # We could optionally generate a caption if needed.
 
     question = st.text_input("Enter your question (answer will be influenced by the selected context):")
     
@@ -526,31 +718,52 @@ def rag_llm_module():
     if question and st.button("Get Answer"):
         with st.spinner("Retrieving relevant context and generating answer via Gemini API..."):
             try:
-                # Retrieve the best matching chunk to the query
-                relevant_chunk, sim_score = retrieve_relevant_chunk(context_text, question, chunk_size=500)
-                st.markdown("**Retrieved context snippet (most relevant chunk):**")
-                st.text(relevant_chunk[:500] + " ...")  # display first 500 characters for preview
-                st.markdown(f"*Similarity score: {sim_score:.2f}*")
-                
-                # Build the prompt combining the retrieved chunk with the user's question
-                prompt = f"Context (from {context_label}):\n{relevant_chunk}\n\nQuestion: {question}"
-                
-                gen_config = types.GenerateContentConfig(
-                    max_output_tokens=max_tokens,
-                    temperature=1.0,
-                    top_p=0.95,
-                    top_k=20
-                )
-                response = client.models.generate_content(
-                    model="gemini-2.0-flash-001",
-                    contents=prompt,
-                    config=gen_config
-                )
-                st.markdown("**Answer:**")
-                st.write(response.text)
+                    # Retrieve the best matching chunk to the query
+                    relevant_chunk, sim_score = retrieve_relevant_chunk(context_text, question, chunk_size=500)
+                    st.markdown("Retrieved context snippet (most relevant chunk):")
+                    st.text(relevant_chunk[:500] + " ...")  # display first 500 characters for preview
+                    st.markdown(f"*Similarity score: {sim_score:.2f}*")
+                    
+                    # Build the prompt combining the retrieved chunk with the user's question
+                    prompt = f"Context (from {context_label}):\n{relevant_chunk}\n\nQuestion: {question}"
+                    
+                    gen_config = types.GenerateContentConfig(
+                        max_output_tokens=max_tokens,
+                        temperature=1.0,
+                        top_p=0.95,
+                        top_k=20
+                    )
+                    response = client.models.generate_content(
+                        model="gemini-2.0-flash-001",
+                        contents=prompt,
+                        config=gen_config
+                    )
+                    st.markdown("Answer:")
+                    st.write(response.text)
             except Exception as e:
                 st.error(f"Error during generation: {e}")
 
+def home_page():
+    st.title("🤖 AI & ML Explorer")
+    st.markdown("""
+    Welcome to the AI & ML Explorer!  
+    This interactive dashboard includes powerful tools to explore, train, and interact with AI models.
+
+    ### 🚀 Modules Available:
+    - 📈 **Regression Analysis**
+    - 🎯 **Clustering**
+    - 🧠 **Neural Networks**
+    - 📚 **LLM RAG Q&A**
+
+    ### 🧭 How to Use:
+    1. Choose a module from the sidebar.
+    2. Follow the guided steps in each module.
+    3. Upload your dataset or documents.
+    4. Get instant insights and predictions!
+
+    ---
+    """)
+    st.success("Use the sidebar on the left to get started.")
 
 
 # ----------------------------
@@ -559,16 +772,19 @@ def rag_llm_module():
 st.title("AI Exam Project")
 st.markdown("This unified application includes modules for Regression, Clustering, Neural Networks, and LLM Q&A RAG tasks.")
 
-tabs = st.tabs(["Regression", "Clustering", "Neural Network", "LLM Q&A"])
+tabs = st.tabs(["Home","Regression", "Clustering", "Neural Network", "LLM Q&A"])
 
 with tabs[0]:
-    regression_module()
+    home_page()
 
 with tabs[1]:
-    clustering_module()
+    regression_module()
 
 with tabs[2]:
-    neural_network_module()
+    clustering_module()
 
 with tabs[3]:
+    neural_network_module()
+
+with tabs[4]:
     rag_llm_module()
